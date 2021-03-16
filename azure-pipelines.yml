@@ -22,7 +22,7 @@ stages:
       inputs:
         command: buildAndPush
         repository: 'reactapp'
-        dockerfile: 'Reactapp/Dockerfile'
+        dockerfile: 'Dockerfile'
         containerRegistry: 'nmpersonalregistry'
   - job: PreReleasePrepForhospitalMicroservice
     dependsOn: Build
@@ -37,16 +37,16 @@ stages:
             echo 'Hello world'           
             cat 'Reactapp/namepace.yaml'
             echo 'Hello world 0'  
-            value=`cat 'Reactapp/reactapp.yaml'`
+            value=`cat 'reactapp.yaml'`
             echo 'Hello world 0.25'  
             value=${value//##BUILD_ID##/$(Build.BuildId)}
             
-            echo "$value" > 'Reactapp/reactapp_build.yaml'
+            echo "$value" > 'reactapp_build.yaml'
             echo 'Hello world 1'  
-            value1=`cat 'Reactapp/reactapp_build.yaml'`
+            value1=`cat 'reactapp_build.yaml'`
             echo 'Hello world 2'  
             echo "$value1"
-            mkdir 'Reactapp/reactapp'  
+            mkdir 'reactapp'  
             echo 'after creation of hospital'  
     - task: PublishPipelineArtifact@1
       inputs:
