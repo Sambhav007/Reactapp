@@ -34,9 +34,7 @@ stages:
         script: |
           # Write your commands here
             
-            echo 'Hello world'           
-            cat 'Reactapp/namepace.yaml'
-            echo 'Hello world 0'  
+            
             value=`cat 'reactapp.yaml'`
             echo 'Hello world 0.25'  
             value=${value//##BUILD_ID##/$(Build.BuildId)}
