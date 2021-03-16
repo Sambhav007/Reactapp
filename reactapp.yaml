@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-api   
+  namespace: ra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  react-api
+      name: react-api
+  template:
+    metadata:
+      labels:
+        app:  react-api
+        name: react-api
+    spec:
+      containers:
+      - name: react-api
+        image: demok8.azurecr.io/reactapp:latest
+        ports:
+        - containerPort: 3000   
+      imagePullSecrets:
+      - name: topsecretregistryconnection
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: react-api-service   
+  namespace: ra
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80  
+    protocol: TCP  
+    targetPort: 3000    
+  selector:
+    app:  react-api
+    name: react-api
