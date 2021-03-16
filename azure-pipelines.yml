@@ -46,10 +46,9 @@ stages:
             value1=`cat 'reactapp_build.yaml'`
             echo 'Hello world 2'  
             echo "$value1"
-            mkdir 'reactapp'  
-            echo 'after creation of hospital'  
+           
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: 'Reactapp'
+        targetPath: ''
         artifact: 'reactapp'
         publishLocation: 'pipeline'
