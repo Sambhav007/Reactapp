@@ -1,0 +1,56 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+  containerRegistry: 'nmpersonalregistry'
+
+stages:
+- stage: BuildAndPublish
+  displayName: Build and Push Docket to Register then Publish of release pipeline
+  jobs:     
+  
+  - job: Build
+    dependsOn: UnitTest
+    steps:    
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: 'reactapp'
+        dockerfile: 'Reactapp/Dockerfile'
+        containerRegistry: 'nmpersonalregistry'
+  - job: PreReleasePrepForhospitalMicroservice
+    dependsOn: Build
+    displayName: Pre Release Preparation (Bash build id and Publish for Release pipeline)
+    steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Write your commands here
+            
+            echo 'Hello world'           
+            cat 'Reactapp/namepace.yaml'
+            echo 'Hello world 0'  
+            value=`cat 'Reactapp/reactapp.yaml'`
+            echo 'Hello world 0.25'  
+            value=${value//##BUILD_ID##/$(Build.BuildId)}
+            
+            echo "$value" > 'Reactapp/reactapp_build.yaml'
+            echo 'Hello world 1'  
+            value1=`cat 'Reactapp/reactapp_build.yaml'`
+            echo 'Hello world 2'  
+            echo "$value1"
+            mkdir 'Reactapp/reactapp'  
+            echo 'after creation of hospital'  
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: 'Reactapp'
+        artifact: 'reactapp'
+        publishLocation: 'pipeline'
