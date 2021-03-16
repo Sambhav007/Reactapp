@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: react-api
-        image: demok8.azurecr.io/reactapp:latest
+        image: demok8.azurecr.io/reactapp:##BUILD_ID##
         ports:
         - containerPort: 3000   
       imagePullSecrets:
